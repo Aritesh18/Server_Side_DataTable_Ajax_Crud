@@ -25,7 +25,7 @@ function loadData() {
         },
         error: function (errormessage) {
             alert(errormessage.responseText);
-        }                                                                                                                                                  
+        }
     });
 }
 //Add Data Function

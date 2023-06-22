@@ -17,26 +17,38 @@ namespace AJAX_CRUD.Models
         public List<Employee> ListAll()
         {
             List<Employee> lst = new List<Employee>();
-            using (SqlConnection con = new SqlConnection(cs))
+
+            try
             {
-                con.Open();
-                SqlCommand com = new SqlCommand("sp_SelectEmployee", con);
-                com.CommandType = CommandType.StoredProcedure;
-                SqlDataReader rdr = com.ExecuteReader();
-                while (rdr.Read())
+                using (SqlConnection con = new SqlConnection(cs))
                 {
-                    lst.Add(new Employee
+                    con.Open();
+                    SqlCommand com = new SqlCommand("sp_SelectEmployee", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    while (rdr.Read())
                     {
-                        EmployeeID = Convert.ToInt32(rdr["EmployeeId"]),
-                        Name = rdr["Name"].ToString(),
-                        Age = Convert.ToInt32(rdr["Age"]),
-                        State = rdr["State"].ToString(),
-                        Country = rdr["Country"].ToString(),
-                    });
+                        lst.Add(new Employee
+                        {
+                            EmployeeID = Convert.ToInt32(rdr["EmployeeId"]),
+                            Name = rdr["Name"].ToString(),
+                            Age = Convert.ToInt32(rdr["Age"]),
+                            State = rdr["State"].ToString(),
+                            Country = rdr["Country"].ToString(),
+                        });
+                    }
                 }
-                return lst;
             }
+            catch (Exception ex)
+            {
+                // Handle any exceptions or log the error message
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+            return lst;
         }
+
 
         //Method for Adding an Employee  
         public int Add(Employee emp)

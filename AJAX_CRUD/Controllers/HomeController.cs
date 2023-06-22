@@ -10,13 +10,12 @@ namespace AJAX_CRUD.Controllers
     public class HomeController : Controller
     {
             EmployeeDB empDB = new EmployeeDB();
-            // GET: Home  
-            public ActionResult Index()
-            {
-
-                return View();
-            }
-            public JsonResult List()
+        public ActionResult Index()
+        {
+            var employees = empDB.ListAll();
+            return View(employees);
+        }
+        public JsonResult List()
             {
                 return Json(empDB.ListAll(), JsonRequestBehavior.AllowGet);
             }

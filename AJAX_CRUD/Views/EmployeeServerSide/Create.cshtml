@@ -1,0 +1,77 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<h2>Create Employee</h2>
+
+@using (Html.BeginForm("Create", "EmployeeServerSide", FormMethod.Post, new { id = "createForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Age)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.State)
+        @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.State)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country)
+        @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Country)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+      $(function () {
+    $("#createForm").submit(function (e) {
+        e.preventDefault(); 
+
+        var form = $(this);
+        if (!form.valid()) {
+            return;
+        }
+
+        $.ajax({
+            url: form.attr("action"),
+            type: form.attr("method"),
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectToUrl;
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function () {
+                alert("An error occurred while processing the request.");
+            }
+        });
+    });
+});
+
+</script>
+}

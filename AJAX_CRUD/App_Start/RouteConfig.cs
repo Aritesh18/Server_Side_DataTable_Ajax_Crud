@@ -14,6 +14,12 @@ namespace AJAX_CRUD
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+       name: "EmployeeServerSide",
+       url: "EmplyoeeServerSide/{action}/{id}",
+       defaults: new { controller = "EmployeeServerSide", action = "Index", id = UrlParameter.Optional }
+   );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

@@ -31,20 +31,6 @@
             </tr>
         </thead>
         <tbody class="tbody">
-            @foreach (var employee in Model)
-            {
-            <tr>
-                <td>@employee.EmployeeID</td>
-                <td>@employee.Name</td>
-                <td>@employee.Age</td>
-                <td>@employee.State</td>
-                <td>@employee.Country</td>
-                <td>
-                    <button type="button" class="btn btn-primary" onclick="editEmployee(@employee.EmployeeID)">Edit</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteEmployee(@employee.EmployeeID)">Delete</button>
-                </td>
-            </tr>
-            }
         </tbody>
     </table>
 </div>
@@ -81,6 +67,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Update</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

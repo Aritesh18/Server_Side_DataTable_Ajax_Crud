@@ -1,0 +1,30 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Create Employee";
+}
+
+<h2>Create Employee</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.State)
+        @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country)
+        @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}
+

@@ -1,0 +1,46 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<h2>Edit Employee</h2>
+
+@using (Html.BeginForm("Edit", "EmployeeServerSide", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.EmployeeID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName)
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div> 
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName)
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Age)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.State)
+        @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.State)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country)
+        @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Country)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+}

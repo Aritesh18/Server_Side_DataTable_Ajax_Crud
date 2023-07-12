@@ -1,0 +1,20 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Employee List";
+}
+<h2 class="text-primary text-center">Employee List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div>
+    <table id="employeeTable" class="table table-bordered table-striped table-responsive">
+
+    </table>
+
+</div>
+@section scripts{
+
+    <script src="~/Scripts/employeeserverside.js"></script>
+}

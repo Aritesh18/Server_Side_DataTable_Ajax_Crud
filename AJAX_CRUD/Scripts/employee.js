@@ -3,9 +3,39 @@ $(document).ready(function () {
     loadData();
 });
 //Load Data function  
+//function loadData() {
+//    $.ajax({
+//        url: "/Home/List",
+//        type: "GET",
+//        contentType: "application/json;charset=utf-8",
+//        dataType: "json",
+//        success: function (result) {
+//            var html = '';
+//            $.each(result, function (key, item) {
+//                html += '<tr>';
+//                html += '<td>' + item.EmployeeID + '</td>';
+//                html += '<td>' + item.Name + '</td>';
+//                html += '<td>' + item.Age + '</td>';
+//                html += '<td>' + item.State + '</td>';
+//                html += '<td>' + item.Country + '</td>';
+//                html += '<td><a href="#" onclick="return getbyID(' + item.EmployeeID + ')">Edit</a> | <a href="#" onclick="Delele(' + item.EmployeeID + ')">Delete</a></td>';
+//                html += '</tr>';
+//            });
+//            $('.tbody').html(html);
+//        },
+//        error: function (errormessage) {
+//            alert(errormessage.responseText);
+//        }
+//    });
+//}
+
+
 function loadData() {
+    var pageNumber = 1; 
+    var pageSize = 5; 
+
     $.ajax({
-        url: "/Home/List",
+        url: "/Home/List?pageNumber=" + pageNumber + "&pageSize=" + pageSize,
         type: "GET",
         contentType: "application/json;charset=utf-8",
         dataType: "json",
@@ -28,6 +58,39 @@ function loadData() {
         }
     });
 }
+
+
+//Load Data function  (alternate)
+
+
+//async function loadData() {
+//    try {
+//        const response = await fetch('/Home/List');
+//        const result = await response.json();
+
+//        let html = '';
+//        result.forEach(item => {
+//            html += `
+//        <tr>
+//          <td>${item.EmployeeID}</td>
+//          <td>${item.Name}</td>
+//          <td>${item.Age}</td>
+//          <td>${item.State}</td>
+//          <td>${item.Country}</td>
+//          <td>
+//            <a href="#" onclick="return getbyID(${item.EmployeeID})">Edit</a> |
+//            <a href="#" onclick="Delele(${item.EmployeeID})">Delete</a>
+//          </td>
+//        </tr>
+//      `;
+//        });
+
+//        document.querySelector('.tbody').innerHTML = html;
+//    } catch (error) {
+//        alert(error.message);
+//    }
+//}
+
 //Add Data Function
 function Add() {
     var res = validate();
@@ -64,7 +127,7 @@ function getbyID(EmpID) {
     $('#Country').css('border-color', 'lightgrey');
     $.ajax({
         url: "/Home/getbyID/" + EmpID,
-        typr: "GET",
+        type: "GET",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         success: function (result) {

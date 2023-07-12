@@ -1,0 +1,32 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Edit Employee";
+}
+
+<h2>Edit Employee</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.EmployeeID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.State)
+        @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Country)
+        @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+}
+

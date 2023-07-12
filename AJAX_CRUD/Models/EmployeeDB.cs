@@ -32,7 +32,8 @@ namespace AJAX_CRUD.Models
                         lst.Add(new Employee
                         {
                             EmployeeID = Convert.ToInt32(rdr["EmployeeId"]),
-                            Name = rdr["Name"].ToString(),
+                            FirstName = rdr["FirstName"].ToString(),
+                            LastName = rdr["LastName"].ToString(),
                             Age = Convert.ToInt32(rdr["Age"]),
                             State = rdr["State"].ToString(),
                             Country = rdr["Country"].ToString(),
@@ -42,7 +43,6 @@ namespace AJAX_CRUD.Models
             }
             catch (Exception ex)
             {
-                // Handle any exceptions or log the error message
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
 
@@ -60,7 +60,8 @@ namespace AJAX_CRUD.Models
                 SqlCommand com = new SqlCommand("sp_InsertUpdateEmployee", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", emp.EmployeeID);
-                com.Parameters.AddWithValue("@Name", emp.Name);
+                com.Parameters.AddWithValue("@Name", emp.FirstName);
+                com.Parameters.AddWithValue("@Name", emp.LastName);
                 com.Parameters.AddWithValue("@Age", emp.Age);
                 com.Parameters.AddWithValue("@State", emp.State);
                 com.Parameters.AddWithValue("@Country", emp.Country);
@@ -69,6 +70,47 @@ namespace AJAX_CRUD.Models
             }
             return i;
         }
+
+        // ...
+
+        //Method to retrieve a single employee by ID
+        public Employee GetEmployee(int employeeID)
+        {
+            Employee employee = null;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    con.Open();
+                    SqlCommand com = new SqlCommand("sp_GetEmployee", con);
+                    com.CommandType = CommandType.StoredProcedure;
+                    com.Parameters.AddWithValue("@Id", employeeID);
+                    SqlDataReader rdr = com.ExecuteReader();
+
+                    if (rdr.Read())
+                    {
+                        employee = new Employee
+                        {
+                            EmployeeID = Convert.ToInt32(rdr["EmployeeId"]),
+                            FirstName = rdr["Name"].ToString(),
+                            Age = Convert.ToInt32(rdr["Age"]),
+                            State = rdr["State"].ToString(),
+                            Country = rdr["Country"].ToString()
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+            return employee;
+        }
+
+        // ...
+
 
         //Method for Updating Employee record  
         public int Update(Employee emp)
@@ -80,7 +122,7 @@ namespace AJAX_CRUD.Models
                 SqlCommand com = new SqlCommand("sp_InsertUpdateEmployee", con);
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", emp.EmployeeID);
-                com.Parameters.AddWithValue("@Name", emp.Name);
+                com.Parameters.AddWithValue("@Name", emp.FirstName);
                 com.Parameters.AddWithValue("@Age", emp.Age);
                 com.Parameters.AddWithValue("@State", emp.State);
                 com.Parameters.AddWithValue("@Country", emp.Country);
@@ -97,7 +139,7 @@ namespace AJAX_CRUD.Models
             using (SqlConnection con = new SqlConnection(cs))
             {
                 con.Open();
-                SqlCommand com = new SqlCommand("sp_DeleteEmployee", con);
+                SqlCommand com = new SqlCommand("sp_DeleteEmployee", con);  
                 com.CommandType = CommandType.StoredProcedure;
                 com.Parameters.AddWithValue("@Id", ID);
                 i = com.ExecuteNonQuery();

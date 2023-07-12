@@ -1,0 +1,29 @@
+﻿@model AJAX_CRUD.Models.Employee
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = null;
+}
+
+<h2>Delete Employee</h2>
+
+<div>
+    <h4>Are you sure  want to delete this employee?</h4>
+    <dl class="dl-horizontal">
+        <dt>Name</dt>
+        <dd>@Model.Name</dd>
+        <dt>Age</dt>
+        <dd>@Model.Age</dd>
+        <dt>State</dt>
+        <dd>@Model.State</dd>
+        <dt>Country</dt>
+        <dd>@Model.Country</dd>
+    </dl>
+
+    @using (Html.BeginForm("DeleteConfirmed", "EmployeeServerSide"))
+    {
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Delete</button>
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+    }
+</div>

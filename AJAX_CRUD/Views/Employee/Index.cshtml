@@ -1,0 +1,103 @@
+﻿@model List<AJAX_CRUD.Models.Employee>
+
+@{
+    ViewBag.Title = "Employee List";
+}
+
+<h2>Employee List</h2>
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-success create-link">Create New Employee</a>
+</p>
+<table id="employeeTable" class="table"></table>
+
+@section Scripts {
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="~/Scripts/employeeclientside.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            createEmployeeTable();
+            attachButtonHandlers();
+        });
+
+        function createEmployeeTable() {
+            var employeeData = @Html.Raw(Json.Encode(Model));
+
+            var table = $("<table>").addClass("table");
+            var thead = $("<thead>");
+            var tbody = $("<tbody>");
+
+            var headers = ["Employee ID", "Name", "Age", "State", "Country", "Action"];
+
+            var headerRow = $("<tr>");
+            headers.forEach(function(header) {
+                headerRow.append($("<th>").text(header));
+            });
+            thead.append(headerRow);
+
+            employeeData.forEach(function(employee) {
+                var row = $("<tr>");
+
+                row.append($("<td>").text(employee.EmployeeID));
+                row.append($("<td>").text(employee.Name));
+                row.append($("<td>").text(employee.Age));
+                row.append($("<td>").text(employee.State));
+                row.append($("<td>").text(employee.Country));
+
+                var actionCell = $("<td>");
+                var editButton = $("<button>").addClass("btn btn-primary edit-link")
+                    .attr("data-id", employee.EmployeeID)
+                    .text("Edit");
+                var deleteButton = $("<button>").addClass("btn btn-danger delete-link")
+                    .attr("data-id", employee.EmployeeID)
+                    .text("Delete");
+                actionCell.append(editButton, deleteButton);
+                row.append(actionCell);
+
+                tbody.append(row);
+            });
+
+            table.append(thead, tbody);
+            $("#employeeTable").append(table);
+        }
+
+        function attachButtonHandlers() {
+            $(document).on("click", ".create-link", function() {
+                var url = $(this).attr("href");
+                window.location.href = url;
+                return false;
+            });
+
+            $(document).on("click", ".edit-link", function() {
+                var employeeId = $(this).attr("data-id");
+                var url = "/Employee/Edit/" + employeeId;
+                window.location.href = url;
+                return false;
+            });
+
+            $(document).on("click", ".delete-link", function() {
+                var employeeId = $(this).attr("data-id");
+                var url = "/Employee/Delete/" + employeeId;
+
+                // Perform an AJAX request to delete the employee
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    success: function(result) {
+                        // Handle the successful response, e.g., refreshing the employee list
+                        // Here, you can either reload the page or update the table using AJAX
+                        // For simplicity, let's reload the page
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle the error response
+                        console.error(error);
+                    }
+                });
+
+                return false;
+            });
+        }
+    </script>
+}

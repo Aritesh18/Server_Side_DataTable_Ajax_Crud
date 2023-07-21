@@ -1,0 +1,7 @@
+﻿<h2>Logout</h2>
+
+<p>Are you sure you want to log out?</p>
+<form method="post" action="@Url.Action("Logout", "EmployeeServerSide")">
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Logout</button>
+</form>

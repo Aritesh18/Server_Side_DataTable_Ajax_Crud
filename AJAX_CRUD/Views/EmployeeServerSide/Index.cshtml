@@ -7,14 +7,17 @@
 
 <p>
     @Html.ActionLink("Create New", "Create")
-</p>
-<div>
-    <table id="employeeTable" class="table table-bordered table-striped table-responsive">
+    <button id="exportButton" class="btn btn-primary">Export to Excel</button>
+    <button id="exportSelectedButton" class="btn btn-success">Export Selected Employees to Excel</button>
 
+</p>
+
+<div>
+    <input type="checkbox" id="selectAll"> <label for="selectAll">Select All</label>
+    <table id="employeeTable" class="table table-bordered table-striped table-responsive">
     </table>
 
 </div>
 @section scripts{
-
     <script src="~/Scripts/employeeserverside.js"></script>
 }

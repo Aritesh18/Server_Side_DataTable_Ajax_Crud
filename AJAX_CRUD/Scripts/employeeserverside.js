@@ -106,14 +106,13 @@ function exportSelectedEmployeesToExcel() {
 }
 
 $(document).ready(function () {
-    // ... Your existing code ...
 
     $('#exportSelectedButton').click(function () {
         exportSelectedEmployeesToExcelDB();
     });
 });
 
-// Corrected exportSelectedEmployeesToExcelDB function
+// exportSelectedEmployeesToExcelDB function
 function exportSelectedEmployeesToExcelDB() {
     var selectedEmployeeIDs = datatable.rows('.selected').data().pluck('EmployeeID').toArray();
 
@@ -141,7 +140,6 @@ function exportSelectedEmployeesToExcelDB() {
 
     form.appendTo('body').submit().remove();
 }
-
 
     Swal.fire({
         title: 'Are you sure?',

@@ -28,18 +28,21 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("EmployeeClientSideData", "Index", "Employee")</li>
                     <li>@Html.ActionLink("EmplyoeeServerSide", "Index", "EmplyoeeServerSide")</li>
-                    <li>@Html.ActionLink("Login", "Login", "EmplyoeeServerSide")</li>
-                </ul>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <div class="text-right">
-                        <span class="mr-3">Hello, @User.Identity.Name!</span>
-                        <form asp-action="Logout" asp-controller="EmployeeServerSide" method="post">
-                            <button type="submit" class="btn btn-link">Logout</button>
-                        </form>
-                    </div>
-                }
-            </div>
+                        <li>@Html.ActionLink("Login", "Login", "EmployeeServerSide")</li>
+                    </ul>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="text-right">
+                            <span class="mr-3">Hello, @User.Identity.Name!</span>
+                            <form asp-action="Logout" asp-controller="EmployeeServerSide" method="post">
+                                @Html.AntiForgeryToken() 
+                                <button type="submit" class="btn btn-link">Logout</button>
+                            </form>
+                        </div>
+                    }
+
+</div>
         </div>
     </div>
     <div class="container body-content">

@@ -1,7 +1,13 @@
-﻿<h2>Logout</h2>
+﻿@model AJAX_CRUD.Models.LoginUser
 
-<p>Are you sure you want to log out?</p>
-<form method="post" action="@Url.Action("Logout", "EmployeeServerSide")">
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-primary">Logout</button>
-</form>
+@{
+    ViewBag.Title = "Logout";
+}
+
+<h2>Logout</h2>
+<p>Click the button below to logout:</p>
+
+@using (Html.BeginForm("Logout", "EmployeeServerSide", FormMethod.Post, new { id = "logoutForm" }))
+{
+    <input type="submit" value="Logout" />
+}

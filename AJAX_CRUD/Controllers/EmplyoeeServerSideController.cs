@@ -13,7 +13,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace AJAX_CRUD.Controllers
 {
@@ -24,7 +26,7 @@ namespace AJAX_CRUD.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
-        
+
         public EmployeeServerSideController(IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, SignInManager<IdentityUser> signInManager)
         {
             _authenticationService = authenticationService;
@@ -35,7 +37,7 @@ namespace AJAX_CRUD.Controllers
         {
             //parameterless constructor
         }
-        //[Authorize]
+        [Authorize]
 
         public ActionResult Index()
         {
@@ -191,7 +193,7 @@ namespace AJAX_CRUD.Controllers
                 {
                     connection.Open();
 
-                    string parameterNames = string.Join(",", selectedEmployeeIDs.Select((_, index) => "@ID" + index));  
+                    string parameterNames = string.Join(",", selectedEmployeeIDs.Select((_, index) => "@ID" + index));
                     string query = "SELECT EmployeeID, FirstName, Age, State, Country " +
                                    "FROM Employee " +
                                    "WHERE EmployeeID IN (" + parameterNames + ")";
@@ -398,7 +400,7 @@ namespace AJAX_CRUD.Controllers
         }
 
         [HttpPost]
-           public ActionResult Login(LoginUser user)
+        public ActionResult Login(LoginUser user)
         {
             if (ModelState.IsValid)
             {
@@ -417,16 +419,23 @@ namespace AJAX_CRUD.Controllers
                             {
                                 if (reader.Read())
                                 {
-                                    var claims = new List<Claim>
-                            {
-                                new Claim(ClaimTypes.Name, reader["UserName"].ToString()),
-                                new Claim(ClaimTypes.Role, reader["Role"].ToString())
-                            };
-                                    var claimsIdentity = new ClaimsIdentity(
-                                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                                    _authenticationService.SignInAsync(_httpContextAccessor.HttpContext, CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties
-                                    { IsPersistent = true });
+                                    var roles = new[] { reader["Role"].ToString() };
+                                    var userData = reader["UserName"].ToString();
+
+                                    var ticket = new FormsAuthenticationTicket(
+                                        1,    //arbitrary version number for the ticket format
+                                        user.UserName,
+                                        DateTime.Now,                //issueDate 
+                                     // DateTime.Now.AddMinutes(30),   
+                                        DateTime.Now.AddSeconds(1),   //expiration time 
+                                        true,                             //isPersistent
+                                        string.Join(",", roles), 
+                                        FormsAuthentication.FormsCookiePath);
+                                    string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+                                    var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+
+                                    HttpContext.Response.Cookies.Add(authCookie);
+
                                     return RedirectToAction("Index", "EmployeeServerSide");
                                 }
                                 else
@@ -439,7 +448,6 @@ namespace AJAX_CRUD.Controllers
                 }
                 catch (Exception ex)
                 {
-                   
                     ModelState.AddModelError("", "An error occurred while processing your login request." + ex.Message);
                     return View("Error");
                 }
@@ -449,10 +457,9 @@ namespace AJAX_CRUD.Controllers
         [HttpPost]
         public ActionResult Logout()
         {
-            _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            FormsAuthentication.SignOut();
             return RedirectToAction("Login", "EmployeeServerSide");
         }
-
     }
-    }
+}
 
